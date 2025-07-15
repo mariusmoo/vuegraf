@@ -190,9 +190,8 @@ def initInfluxConnection(config):
             influx = influxdb.InfluxDBClient(host=config['influxDb']['host'], port=config['influxDb']['port'],
                                              database=config['influxDb']['database'], ssl=sslEnable, verify_ssl=sslVerify)
 
-        influx.create_database(config['influxDb']['database'])
-
         if config['args'].resetdatabase:
+            influx.create_database(config['influxDb']['database'])
             logger.info('Resetting database')
             influx.delete_series(measurement='energy_usage')
 
