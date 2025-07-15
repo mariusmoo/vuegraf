@@ -151,13 +151,13 @@ Be aware that the included dashboard assumes your device name contains the word 
                         "Landscape Features",
                         "Septic Pump",
                         "Deep Freeze",
-                        "Sprinkler Pump"        
+                        "Sprinkler Pump"
                     ]
                 }
             ]
 ```
 
-You can also explicity define the channel and circuit names by using a dictionary in the configuration. Circuits that are merged in the Emporia App may be given a channel assignment that is far out of the range of your circuts (ex. 98 or 99). In this case, assigning the channels directly using a dictionary is preferred. 
+You can also explicity define the channel and circuit names by using a dictionary in the configuration. Circuits that are merged in the Emporia App may be given a channel assignment that is far out of the range of your circuts (ex. 98 or 99). In this case, assigning the channels directly using a dictionary is preferred.
 
 ```json
             "devices": [
@@ -248,7 +248,7 @@ options:
   --historydays HISTORYDAYS
                         Starts executing by pulling history of Hours and Day data for specified number of days.
                         example: --load-history-day 60
-  --resetdatabase       Drop database and create a new one
+  --resetdatabase       Drop database and create a new one. If not specified, the database must already exist.
 ```
 
 ## Alerts
@@ -298,7 +298,7 @@ For every datapoint a tag is stored in InfluxDB for the type of measurement
 - `detailed = Day` represents a single data point to summarize the entire day
 
 When building graphs that show a sum of the energy usage, be sure to only include the correct detail tag, otherwise your summed values will be higher than expected. Detailed data will take more time for the graphs to query due to the extra data involved. If you want to have a chart that shows daily data over a long period or even a full year, use the `detailed = Day` tag.
-If you are running this on a small server, you might want to look at setting a RETENTION POLICY on your InfluxDB bucket to remove minute or second data over time. For example, it will reduce storage needs if you retain only 30 days of per-_second_ data. 
+If you are running this on a small server, you might want to look at setting a RETENTION POLICY on your InfluxDB bucket to remove minute or second data over time. For example, it will reduce storage needs if you retain only 30 days of per-_second_ data.
 
 The name of the "detailed" tag as well as the associated tag values (True, False, Hour, Day) can be changed via the configuration file by providing the appropriate value within the InfluxDb section:
 
@@ -369,7 +369,7 @@ To include an Emporia smart plug in the configuration, add each plug as it's own
 
 For those that want to run Vuegraf using Docker Compose, the following files have been included: `docker-compose.yaml.template` and `docker-compose-run.sh`. Copy the`docker-compose.yaml.template` file to a new file called `docker-compose.yaml`. In the newly copied file, `vuegraf.volumes` values will need to be changed to the same directory you have created your vuegraf.json file. Additionally, adjust the persistent host storage path for the InfluxDB data volume.
 
-Finally run the `docker-compose-run.sh` script to start up the multi-container application. 
+Finally run the `docker-compose-run.sh` script to start up the multi-container application.
 
 ```sh
 ./docker-compose-run.sh
@@ -414,7 +414,7 @@ There are additional steps necessary for making this configuration fault toleran
 - Much more!
 
 These topics are out of scope of this project, but are intended to help new system administrators understand different areas that need to be considered for ensuring disaster recovery and prevention of vulnerabilities.
- 
+
 # License
 
 Vuegraf is distributed under the MIT license.
