@@ -822,7 +822,7 @@ def test_init_influx_connection_v1_with_auth(mock_influx_client_class):
         ssl=False,
         verify_ssl=True
     )
-    mock_influx_instance.create_database.assert_called_once_with('vuegraf')
+    mock_influx_instance.create_database.assert_not_called()
     mock_influx_instance.delete_series.assert_not_called()
     assert config['influx'] == mock_influx_instance
 
@@ -845,7 +845,7 @@ def test_init_influx_connection_v1_no_auth(mock_influx_client_class):
         ssl=False,
         verify_ssl=True
     )
-    mock_influx_instance.create_database.assert_called_once_with('vuegraf')
+    mock_influx_instance.create_database.assert_not_called()
     assert config['influx'] == mock_influx_instance
 
 
@@ -869,7 +869,7 @@ def test_init_influx_connection_v1_missing_ssl_config(mock_influx_client_class):
         ssl=False,
         verify_ssl=True
     )
-    mock_influx_instance.create_database.assert_called_once_with('vuegraf')
+    mock_influx_instance.create_database.assert_not_called()
     assert config['influx'] == mock_influx_instance
 
 
