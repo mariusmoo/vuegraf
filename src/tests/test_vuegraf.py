@@ -351,8 +351,8 @@ class TestVuegraf(unittest.TestCase):
         mock_write_points.assert_called_once_with(test_config, [])
         mock_pause_event.wait.assert_called_once()
         # Check that the error was logged and traceback printed
-        mock_logger.error.assert_called_once()
-        self.assertIn('Failed to record new usage data', mock_logger.error.call_args[0][0])
+        mock_logger.exception.assert_called_once()
+        self.assertIn('Failed to record new usage data', mock_logger.exception.call_args[0][0])
 
     @patch('vuegraf.vuegraf.initConfig')
     @patch('vuegraf.vuegraf.initInfluxConnection')
