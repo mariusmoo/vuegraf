@@ -12,6 +12,7 @@ venv/
 env/
 build/
 .pytest_cache/
+.vscode/
 *.swp
 *~
 vuegraf.json
