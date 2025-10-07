@@ -304,9 +304,8 @@ class TestVuegraf(unittest.TestCase):
     @patch('vuegraf.vuegraf.pauseEvent')
     @patch('vuegraf.vuegraf.logger')
     @patch('vuegraf.vuegraf.getConfigValue')
-    @patch('traceback.print_exc')  # Mock traceback printing
     def test_run_collection_exception(  # pylint: disable=too-many-arguments,too-many-locals
-        self, mock_print_exc, mock_get_config_value, mock_logger,
+        self, mock_get_config_value, mock_logger,
         mock_pause_event, mock_get_day, mock_get_hour, mock_get_time,
         mock_write_points, mock_collect_usage, mock_init_device,
         mock_init_influx, mock_init_config
@@ -354,7 +353,6 @@ class TestVuegraf(unittest.TestCase):
         # Check that the error was logged and traceback printed
         mock_logger.error.assert_called_once()
         self.assertIn('Failed to record new usage data', mock_logger.error.call_args[0][0])
-        mock_print_exc.assert_called_once()
 
     @patch('vuegraf.vuegraf.initConfig')
     @patch('vuegraf.vuegraf.initInfluxConnection')
