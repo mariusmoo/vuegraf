@@ -110,8 +110,10 @@ def run():
                         prevDayLocal = curDayLocal
 
             except Exception:
-                logger.error('Failed to record new usage data: {}'.format(sys.exc_info()))
-                traceback.print_exc()
+                # Use logger.exception to safely log the error and full stack trace.
+                # Avoid manually formatting sys.exc_info() which can cause problems
+                # with chained exceptions or traceback objects.
+                logger.exception('Failed to record new usage data')
 
             if not running:
                 break
