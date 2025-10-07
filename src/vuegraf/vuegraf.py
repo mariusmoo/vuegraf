@@ -21,7 +21,6 @@ import logging
 import signal
 import sys
 import threading
-import traceback
 from pyemvue.enums import Scale
 
 # Local imports
@@ -116,9 +115,6 @@ def run():
                         prevDayLocal = curDayLocal
 
             except Exception:
-                # Use logger.exception to safely log the error and full stack trace.
-                # Avoid manually formatting sys.exc_info() which can cause problems
-                # with chained exceptions or traceback objects.
                 logger.exception('Failed to record new usage data')
 
             if not running:
@@ -159,12 +155,10 @@ def main(args=None):
             quit(0)
         else:
             # Catch other SystemExit codes (besides 0 and 2)
-            logger.error('Fatal system exit: {}'.format(sys.exc_info()))
-            traceback.print_exc()
+            logger.exception('Fatal system exit:')
     except Exception:
         # Catch any other unexpected exceptions
-        logger.error('Fatal error: {}'.format(sys.exc_info()))
-        traceback.print_exc()
+        logger.exception('Fatal error:')
 
 
 if __name__ == '__main__':
