@@ -9,6 +9,7 @@ import signal
 import sys
 import datetime
 import pytest
+import requests
 
 # Local imports
 from vuegraf import vuegraf
@@ -550,9 +551,20 @@ class TestVuegraf(unittest.TestCase):
         self.assertIn('Fatal system exit', mock_logger.exception.call_args[0][0])
 
     @patch('vuegraf.vuegraf.run')
-    @patch('vuegraf.vuegraf.signal.signal')
     @patch('vuegraf.vuegraf.logger')
-    def test_main_other_exception(self, mock_logger, _mock_signal, mock_run):
+    def test_main_server_timeout(self, mock_logger, mock_run):
+        """Test the main function handles a server timeout."""
+        test_exception = requests.exceptions.ReadTimeout(ValueError("Timeout"))
+        mock_run.side_effect = test_exception
+        vuegraf.main()
+        mock_logger.exception.assert_called_once()
+        # Check that the log message contains the expected text
+        logged_message = mock_logger.exception.call_args[0][0]
+        self.assertIn('Fatal error', logged_message)
+
+    @patch('vuegraf.vuegraf.run')
+    @patch('vuegraf.vuegraf.logger')
+    def test_main_other_exception(self, mock_logger, mock_run):
         """Test the main function handles other exceptions."""
         test_exception = ValueError("Test error")
         mock_run.side_effect = test_exception
