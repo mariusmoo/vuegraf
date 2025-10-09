@@ -21,7 +21,6 @@ import logging
 import signal
 import sys
 import threading
-import traceback
 from pyemvue.enums import Scale
 
 # Local imports
@@ -116,8 +115,7 @@ def run():
                         prevDayLocal = curDayLocal
 
             except Exception:
-                logger.error('Failed to record new usage data: {}'.format(sys.exc_info()))
-                traceback.print_exc()
+                logger.exception('Failed to record new usage data')
 
             if not running:
                 break
@@ -157,12 +155,10 @@ def main(args=None):
             quit(0)
         else:
             # Catch other SystemExit codes (besides 0 and 2)
-            logger.error('Fatal system exit: {}'.format(sys.exc_info()))
-            traceback.print_exc()
+            logger.exception('Fatal system exit:')
     except Exception:
         # Catch any other unexpected exceptions
-        logger.error('Fatal error: {}'.format(sys.exc_info()))
-        traceback.print_exc()
+        logger.exception('Fatal error:')
 
 
 if __name__ == '__main__':
