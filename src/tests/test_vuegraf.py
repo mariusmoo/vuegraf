@@ -304,9 +304,8 @@ class TestVuegraf(unittest.TestCase):
     @patch('vuegraf.vuegraf.pauseEvent')
     @patch('vuegraf.vuegraf.logger')
     @patch('vuegraf.vuegraf.getConfigValue')
-    @patch('traceback.print_exc')  # Mock traceback printing
     def test_run_collection_exception(  # pylint: disable=too-many-arguments,too-many-locals
-        self, mock_print_exc, mock_get_config_value, mock_logger,
+        self, mock_get_config_value, mock_logger,
         mock_pause_event, mock_get_day, mock_get_hour, mock_get_time,
         mock_write_points, mock_collect_usage, mock_init_device,
         mock_init_influx, mock_init_config
@@ -351,10 +350,9 @@ class TestVuegraf(unittest.TestCase):
         # In this test setup, it's called with an empty list.
         mock_write_points.assert_called_once_with(test_config, [])
         mock_pause_event.wait.assert_called_once()
-        # Check that the error was logged and traceback printed
-        mock_logger.error.assert_called_once()
-        self.assertIn('Failed to record new usage data', mock_logger.error.call_args[0][0])
-        mock_print_exc.assert_called_once()
+        # Check that the error was logged
+        mock_logger.exception.assert_called_once()
+        self.assertIn('Failed to record new usage data', mock_logger.exception.call_args[0][0])
 
     @patch('vuegraf.vuegraf.initConfig')
     @patch('vuegraf.vuegraf.initInfluxConnection')
@@ -539,25 +537,22 @@ class TestVuegraf(unittest.TestCase):
     @patch('vuegraf.vuegraf.run')
     @patch('vuegraf.vuegraf.signal.signal')  # Patch to prevent actual signal handling
     @patch('vuegraf.vuegraf.logger')
-    @patch('traceback.print_exc')
-    def test_main_system_exit_other(self, mock_traceback, mock_logger, mock_signal_func, mock_run):
+    def test_main_system_exit_other(self, mock_logger, mock_signal_func, mock_run):
         """Test the main function handles SystemExit with other codes."""
         mock_run.side_effect = SystemExit(1)  # Use a non-zero, non-2 code
-        # The main function catches this, logs, prints traceback, and then finishes.
+        # The main function catches this, logs with traceback, and then finishes.
         # It does NOT re-raise the SystemExit(1).
         vuegraf.main()
         # Verify signal handlers were attempted to be set
         mock_signal_func.assert_called()
-        # Check error was logged and traceback printed
-        mock_logger.error.assert_called_once()
-        self.assertIn('Fatal system exit', mock_logger.error.call_args[0][0])
-        mock_traceback.assert_called_once()
+        # Check error was logged
+        mock_logger.exception.assert_called_once()
+        self.assertIn('Fatal system exit', mock_logger.exception.call_args[0][0])
 
     @patch('vuegraf.vuegraf.run')
     @patch('vuegraf.vuegraf.signal.signal')
     @patch('vuegraf.vuegraf.logger')
-    @patch('traceback.print_exc')
-    def test_main_other_exception(self, mock_traceback, mock_logger, _mock_signal, mock_run):
+    def test_main_other_exception(self, mock_logger, _mock_signal, mock_run):
         """Test the main function handles other exceptions."""
         test_exception = ValueError("Test error")
         mock_run.side_effect = test_exception
@@ -565,12 +560,10 @@ class TestVuegraf(unittest.TestCase):
         # The test was failing because the mock's side_effect *was* raising it.
         # The correct behavior is that main() should complete without raising.
         vuegraf.main()
-        mock_logger.error.assert_called_once()
+        mock_logger.exception.assert_called_once()
         # Check that the log message contains the expected text
-        logged_message = mock_logger.error.call_args[0][0]
+        logged_message = mock_logger.exception.call_args[0][0]
         self.assertIn('Fatal error', logged_message)
-        # Check that traceback was printed
-        mock_traceback.assert_called_once()
 
     @patch('vuegraf.vuegraf.pauseEvent')
     @patch('vuegraf.vuegraf.logger')
