@@ -1,13 +1,36 @@
-# 1.10.0
+# 1.TBD.TBD
 
 ## Breaking changes
 - TBD
+
+## New features
+- TBD
+
+## Other changes
+- TBD
+
+# 1.10.1
+
+## Breaking changes
+- None
+
+## New features
+- None
+
+## Other changes
+- Emporia API change caused Vuegraf to fail to start. Removed unnecessary API call. - @jertel
+
+# 1.10.0
+
+## Breaking changes
+- None
 
 ## New features
 - Added support for writing events to MQTT as well as Influx. - [#201](https://github.com/jertel/vuegraf/pull/201) - @markfickett
 
 ## Other changes
 - Fixed encoded characters in influxdb dashboard import - [#191](https://github.com/jertel/vuegraf/pull/191) - @toosmooth
+- Upgraded influxdb_client and pyemvue libraries - @jertel
 
 # 1.9.0
 

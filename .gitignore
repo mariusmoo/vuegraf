@@ -21,3 +21,4 @@ int
 docker-compose.yaml
 vugraftobe.py
 config.json
+.vscode
